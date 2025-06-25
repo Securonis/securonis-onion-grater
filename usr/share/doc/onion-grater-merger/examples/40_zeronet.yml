@@ -1,0 +1,32 @@
+## Copyright (C) 2016 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
+## See the file COPYING for copying conditions
+
+#### meta start
+#### project Whonix
+#### category tor-control
+#### description
+## Shipped but not enabled by default onion-grater profile.
+#### meta end
+
+---
+- exe-paths:
+    - '*'
+  users:
+    - '*'
+  hosts:
+    - '*'
+  commands:
+    ADD_ONION:
+      ## old
+      - pattern:     'NEW:(\S+) Port=15441,15441'
+        replacement: 'NEW:{} Port=15441,{client-address}:15441'
+      ## new
+      ## https://github.com/HelloZeroNet/ZeroNet/pull/484#issuecomment-489466198
+      - pattern:     'NEW:(\S+) port=15441'
+        replacement: 'NEW:{} port=15441,{client-address}:15441'
+      - pattern:     'NEW:(\S+) port=33750'
+        replacement: 'NEW:{} port=33750,{client-address}:33750'
+    DEL_ONION:
+      - '.+'
+    GETCONF:
+      - 'hiddenservicesinglehopmode'
