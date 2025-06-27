@@ -11,20 +11,19 @@
 [Unit]
 Description=Tor control port filter proxy
 Documentation=https://tails.boum.org/contribute/design/
-After=network.target
-Wants=network.target
+After=network.target tor.service
+Wants=network.target tor.service
 ConditionPathExists=!/run/qubes/this-is-templatevm
 
 [Service]
-## 'ExecStart' gets overwritten in Whonix by file:
-## /lib/systemd/system/onion-grater.service.d/30_cpfpy.conf
+Type=simple
 ExecStart=/usr/lib/onion-grater
-
+RemainAfterExit=yes
 
 SuccessExitStatus=143
-TimeoutSec=30
+TimeoutSec=60
 Restart=always
-RestartSec=60
+RestartSec=30
 
 # Sandboxing.
 CapabilityBoundingSet=CAP_DAC_OVERRIDE CAP_SYS_PTRACE
@@ -37,10 +36,7 @@ ProtectKernelLogs=true
 ProtectHostname=true
 ProtectClock=true
 ProtectProc=invisible
-## See comment below.
-#ProcSubset=pid
 PrivateTmp=true
-PrivateUsers=true
 PrivateDevices=true
 NoNewPrivileges=true
 LockPersonality=true
@@ -57,7 +53,6 @@ openat getdents64 getcwd accept4 clone recvfrom shutdown madvise pipe2 dup2 \
 wait4 mkdir fchownat _llseek send recv faccessat readlinkat newfstatat ppoll \
 epoll_create1 select pread64 clone3
 SystemCallArchitectures=native
-
 
 [Install]
 WantedBy=multi-user.target
